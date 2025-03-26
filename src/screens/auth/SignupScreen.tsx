@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { TextInput, Button } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../App';
-import { useAuth } from '../../hooks/useAuth';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { TextInput, Button } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../App";
+import { useAuth } from "../../hooks/useAuth";
 
-type SignupScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+type SignupScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Signup"
+>;
 
 type FormData = {
   name: string;
@@ -22,16 +31,21 @@ const SignupScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormData>({
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
-  const password = watch('password');
+  const password = watch("password");
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -40,8 +54,8 @@ const SignupScreen = () => {
       await signup(data.name, data.email, data.password);
       // Navigation will be handled by the AuthContext when isAuthenticated changes
     } catch (error) {
-      setError('Registration failed. Please try again.');
-      console.error('Signup error:', error);
+      setError("Registration failed. Please try again.");
+      console.error("Signup error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +64,9 @@ const SignupScreen = () => {
   return (
     <ScrollView className="flex-1 bg-background">
       <View className="p-6">
-        <Text className="text-3xl font-bold text-primary mb-2">Create Account</Text>
+        <Text className="text-3xl font-bold text-primary mb-2">
+          Create Account
+        </Text>
         <Text className="text-textLight mb-8">
           Sign up to start tracking your medications
         </Text>
@@ -64,7 +80,7 @@ const SignupScreen = () => {
         <Controller
           control={control}
           rules={{
-            required: 'Name is required',
+            required: "Name is required",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -75,22 +91,24 @@ const SignupScreen = () => {
               value={value}
               error={!!errors.name}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="name"
         />
         {errors.name && (
-          <Text className="text-danger text-xs mb-3">{errors.name.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.name.message}
+          </Text>
         )}
 
         <Controller
           control={control}
           rules={{
-            required: 'Email is required',
+            required: "Email is required",
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
+              message: "Invalid email address",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -104,22 +122,24 @@ const SignupScreen = () => {
               autoCapitalize="none"
               error={!!errors.email}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="email"
         />
         {errors.email && (
-          <Text className="text-danger text-xs mb-3">{errors.email.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.email.message}
+          </Text>
         )}
 
         <Controller
           control={control}
           rules={{
-            required: 'Password is required',
+            required: "Password is required",
             minLength: {
               value: 6,
-              message: 'Password must be at least 6 characters',
+              message: "Password must be at least 6 characters",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -132,20 +152,22 @@ const SignupScreen = () => {
               secureTextEntry
               error={!!errors.password}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="password"
         />
         {errors.password && (
-          <Text className="text-danger text-xs mb-3">{errors.password.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.password.message}
+          </Text>
         )}
 
         <Controller
           control={control}
           rules={{
-            required: 'Please confirm your password',
-            validate: value => value === password || 'Passwords do not match',
+            required: "Please confirm your password",
+            validate: (value) => value === password || "Passwords do not match",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -157,31 +179,33 @@ const SignupScreen = () => {
               secureTextEntry
               error={!!errors.confirmPassword}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="confirmPassword"
         />
         {errors.confirmPassword && (
-          <Text className="text-danger text-xs mb-3">{errors.confirmPassword.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.confirmPassword.message}
+          </Text>
         )}
-
-        <Button
-          mode="contained"
-          onPress={handleSubmit(onSubmit)}
-          disabled={isLoading}
-          className="mt-6 py-1 bg-primary rounded-md"
-        >
-          {isLoading ? (
-            <ActivityIndicator color="white" size="small" />
-          ) : (
-            'Create Account'
-          )}
-        </Button>
-
+        <View className="mt-6">
+          <Button
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}
+            disabled={isLoading}
+            className="mt-6 py-1 bg-primary rounded-md"
+          >
+            {isLoading ? (
+              <ActivityIndicator color="white" size="small" />
+            ) : (
+              "Create Account"
+            )}
+          </Button>
+        </View>
         <View className="flex-row justify-center mt-6">
           <Text className="text-textLight mr-2">Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text className="text-primary font-semibold">Sign in</Text>
           </TouchableOpacity>
         </View>

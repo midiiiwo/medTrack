@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { Button, TextInput, Checkbox, Switch } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { RootStackParamList } from '../../../App';
-import { useAuth } from '../../hooks/useAuth';
-import { Medication, TimeOfDay } from '../../types/medication';
-import { generateId, saveMedication } from '../../utils/storageService';
-import { getCurrentDate, formatDate } from '../../utils/dateUtils';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { Button, TextInput, Checkbox, Switch } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { RootStackParamList } from "../../../App";
+import { useAuth } from "../../hooks/useAuth";
+import { Medication, TimeOfDay } from "../../types/medication";
+import { generateId, saveMedication } from "../../utils/storageService";
+import { getCurrentDate, formatDate } from "../../utils/dateUtils";
 
-type AddMedicationNavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddMedication'>;
+type AddMedicationNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "AddMedication"
+>;
 
 type FormData = {
   name: string;
@@ -38,33 +48,37 @@ const AddMedicationScreen = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [hasEndDate, setHasEndDate] = useState(false);
 
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues: {
-      name: '',
-      dosage: '',
-      frequency: 'Daily',
+      name: "",
+      dosage: "",
+      frequency: "Daily",
       startDate: startDate.toISOString(),
-      instructions: '',
+      instructions: "",
     },
   });
 
   const toggleTimeOfDay = (time: TimeOfDay) => {
     if (selectedTimes.includes(time)) {
-      setSelectedTimes(selectedTimes.filter(t => t !== time));
+      setSelectedTimes(selectedTimes.filter((t) => t !== time));
     } else {
       setSelectedTimes([...selectedTimes, time]);
     }
   };
 
   const handleStartDateChange = (event: any, selectedDate?: Date) => {
-    setShowStartDatePicker(Platform.OS === 'ios');
+    setShowStartDatePicker(Platform.OS === "ios");
     if (selectedDate) {
       setStartDate(selectedDate);
     }
   };
 
   const handleEndDateChange = (event: any, selectedDate?: Date) => {
-    setShowEndDatePicker(Platform.OS === 'ios');
+    setShowEndDatePicker(Platform.OS === "ios");
     if (selectedDate) {
       setEndDate(selectedDate);
     }
@@ -73,12 +87,12 @@ const AddMedicationScreen = () => {
   const onSubmit = async (data: FormData) => {
     try {
       if (!user) {
-        setError('User is not authenticated');
+        setError("User is not authenticated");
         return;
       }
 
       if (selectedTimes.length === 0) {
-        setError('Please select at least one time of day');
+        setError("Please select at least one time of day");
         return;
       }
 
@@ -101,19 +115,21 @@ const AddMedicationScreen = () => {
       await saveMedication(newMedication);
       navigation.goBack();
     } catch (error) {
-      console.error('Failed to save medication:', error);
-      setError('Failed to save medication. Please try again.');
+      console.error("Failed to save medication:", error);
+      setError("Failed to save medication. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const frequencyOptions = ['Daily', 'Every other day', 'Weekly', 'As needed'];
+  const frequencyOptions = ["Daily", "Every other day", "Weekly", "As needed"];
 
   return (
     <ScrollView className="flex-1 bg-background">
       <View className="p-6">
-        <Text className="text-2xl font-bold text-primary mb-6">Add New Medication</Text>
+        <Text className="text-2xl font-bold text-primary mb-6">
+          Add New Medication
+        </Text>
 
         {error && (
           <View className="bg-red-100 p-3 rounded-md mb-4">
@@ -123,7 +139,7 @@ const AddMedicationScreen = () => {
 
         <Controller
           control={control}
-          rules={{ required: 'Medication name is required' }}
+          rules={{ required: "Medication name is required" }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               label="Medication Name"
@@ -133,18 +149,20 @@ const AddMedicationScreen = () => {
               value={value}
               error={!!errors.name}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="name"
         />
         {errors.name && (
-          <Text className="text-danger text-xs mb-3">{errors.name.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.name.message}
+          </Text>
         )}
 
         <Controller
           control={control}
-          rules={{ required: 'Dosage is required' }}
+          rules={{ required: "Dosage is required" }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               label="Dosage (e.g., 10mg, 1 tablet)"
@@ -154,13 +172,15 @@ const AddMedicationScreen = () => {
               value={value}
               error={!!errors.dosage}
               className="mb-2"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="dosage"
         />
         {errors.dosage && (
-          <Text className="text-danger text-xs mb-3">{errors.dosage.message}</Text>
+          <Text className="text-danger text-xs mb-3">
+            {errors.dosage.message}
+          </Text>
         )}
 
         <Text className="font-semibold text-text my-2">Frequency</Text>
@@ -176,7 +196,9 @@ const AddMedicationScreen = () => {
                 >
                   <View
                     className={`w-5 h-5 rounded-full mr-3 ${
-                      value === option ? 'bg-secondary' : 'border border-gray-400'
+                      value === option
+                        ? "bg-secondary"
+                        : "border border-gray-400"
                     }`}
                   />
                   <Text>{option}</Text>
@@ -189,14 +211,18 @@ const AddMedicationScreen = () => {
 
         <Text className="font-semibold text-text my-2">Time of Day</Text>
         <View className="flex-row flex-wrap mb-4">
-          {['morning', 'afternoon', 'evening', 'night'].map((time) => (
+          {["morning", "afternoon", "evening", "night"].map((time) => (
             <TouchableOpacity
               key={time}
               onPress={() => toggleTimeOfDay(time as TimeOfDay)}
               className="flex-row items-center mr-6 mb-2"
             >
               <Checkbox
-                status={selectedTimes.includes(time as TimeOfDay) ? 'checked' : 'unchecked'}
+                status={
+                  selectedTimes.includes(time as TimeOfDay)
+                    ? "checked"
+                    : "unchecked"
+                }
                 color="#86BBD8"
               />
               <Text className="ml-1 capitalize">{time}</Text>
@@ -236,7 +262,11 @@ const AddMedicationScreen = () => {
               onPress={() => setShowEndDatePicker(true)}
               className="bg-white border border-gray-300 rounded-md p-3 mb-4"
             >
-              <Text>{endDate ? formatDate(endDate.toISOString()) : 'Select End Date'}</Text>
+              <Text>
+                {endDate
+                  ? formatDate(endDate.toISOString())
+                  : "Select End Date"}
+              </Text>
             </TouchableOpacity>
 
             {showEndDatePicker && (
@@ -263,21 +293,22 @@ const AddMedicationScreen = () => {
               multiline
               numberOfLines={3}
               className="mb-4"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: "white" }}
             />
           )}
           name="instructions"
         />
-
-        <Button
-          mode="contained"
-          onPress={handleSubmit(onSubmit)}
-          loading={isLoading}
-          disabled={isLoading}
-          className="mt-4 py-1 bg-primary rounded-md"
-        >
-          Add Medication
-        </Button>
+        <View className="mt-4 ">
+          <Button
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
+            disabled={isLoading}
+            className="py-1 bg-primary rounded-md"
+          >
+            Add Medication
+          </Button>
+        </View>
       </View>
     </ScrollView>
   );
