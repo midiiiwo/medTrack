@@ -84,3 +84,60 @@ A mobile application built with React Native and Expo that helps patients track 
 ## License
 
 This project is for demonstration purposes as part of the Ngoane Health Tech internship application.
+
+
+
+## Development Process & Decision Making
+
+### Problem Analysis
+- Identified key pain points for patients: forgetting to take medication, lack of a simple tracking system
+- Focused on building a minimalist solution that addresses core needs without overwhelming users
+
+### Architecture Decisions
+- **React Native with Expo**: Chosen for rapid development and cross-platform capability
+- **TypeScript**: Implemented for type safety and improved developer experience
+- **NativeWind (Tailwind CSS)**: Selected for consistent styling and development speed
+- **Local Storage**: Used AsyncStorage for data persistence, prioritizing offline functionality
+- **Context API**: Chosen over Redux for simpler state management appropriate for app scale
+
+### UI/UX Approach
+- Implemented a clear visual hierarchy with actionable cards
+- Used color-coding for intuitive status recognition (taken/skipped/pending)
+- Designed dedicated screens for distinct operations (listing, details, adding) to minimize cognitive load
+- Implemented time-based tracking (morning, afternoon, evening, night) for better usability
+
+### Key Technical Implementations
+- **Authentication Flow**: Simple yet secure local authentication system
+- **Medication Management**: CRUD operations for medications
+- **Tracking System**: Time-of-day based tracking with status indicators
+- **History View**: Chronological display of medication adherence
+- **Offline-First**: All data persists locally on the device
+
+### Challenges & Solutions
+- **Date/Time Handling**: Implemented robust date-fns library for consistent date operations
+- **Form Validation**: Used React Hook Form for reliable validation with minimal re-renders
+- **Component Organization**: Created a structured hierarchy of components for maximum reusability
+- **Data Persistence**: Implemented wrapper functions around AsyncStorage for better error handling
+
+## Running the Application
+
+1. **Install dependencies**: `bun install` or `npm install`
+2. **Start the development server**: `bun start` or `npm start`
+3. **Run on a device**: Scan the QR code with Expo Go or use emulator/simulator
+
+## Libraries Used
+- React Native & Expo
+- TypeScript
+- NativeWind (Tailwind CSS for React Native)
+- React Navigation
+- React Native Paper
+- AsyncStorage
+- React Hook Form
+- Date-fns
+
+## Future Development Considerations
+- Push notifications for medication reminders
+- Analytics dashboard for adherence patterns
+- Cloud synchronization for multi-device usage
+- Healthcare provider data sharing
+
